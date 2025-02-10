@@ -1,5 +1,5 @@
-import { TaskStatus } from '../models/task-model'
 import { IsNotEmpty, IsEnum, IsOptional, IsString } from 'class-validator'
+import { TaskStatus } from '../task.entity'
 
 export class TaskRequestDto {
   @IsNotEmpty()
