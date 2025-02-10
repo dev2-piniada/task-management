@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common'
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { User } from './user.entity'
 import { UserRepository } from './user.respository'
@@ -15,6 +20,14 @@ export class AuthService {
     const { username, password } = authCredentialsDto
 
     const user = this.userRepository.create({ username, password })
-    await this.userRepository.save(user)
+    try {
+      await this.userRepository.save(user)
+    } catch (error: any) {
+      if (error.code === 23505) {
+        throw new ConflictException('Username already exists')
+      } else {
+        throw new InternalServerErrorException()
+      }
+    }
   }
 }
